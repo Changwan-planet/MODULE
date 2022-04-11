@@ -1,0 +1,44 @@
+MODULE MD_MVMEAN
+IMPLICIT NONE
+
+CONTAINS
+
+  SUBROUTINE mv_mean_bscan(B_SCAN_IMAGE, MV, DIS, DIS2, ROWS, MV_MEAN_BSCAN) 
+  IMPLICIT NONE
+
+  INTEGER :: Z !depth
+  INTEGER :: X, XX
+
+  INTEGER, INTENT(IN) :: DIS
+  INTEGER, INTENT(IN) :: DIS2
+  INTEGER, INTENT(IN) :: ROWS
+  INTEGER, INTENT(IN) :: MV !the number of values for moving average
+  
+
+  REAL*8, DIMENSION(DIS,1,ROWS), INTENT(IN) :: B_SCAN_IMAGE
+  REAL*8, DIMENSION(DIS2,1,ROWS), INTENT(OUT) ::MV_MEAN_BSCAN
+  
+  REAL*8, DIMENSION(1,1,ROWS) :: MV_MEAN
+
+    !DO Z = 1, ROWS
+    !   PRINT *, Z, B_SCAN_IMAGE(1,1,Z)
+    !END DO 
+
+    DO XX = 1, DIS2
+    DO Z = 1, ROWS
+    DO X = 1, DIS, MV  
+         MV_MEAN(1,1,Z) = SUM(B_SCAN_IMAGE(X:X+MV,1,Z)) / REAL(MV)
+    END DO
+    END DO
+         MV_MEAN_BSCAN(XX,1,:) = MV_MEAN(1,1,:)
+    END DO
+
+    !DO Z = 1, ROWS
+    !   PRINT *, Z,  B_SCAN_IMAGE(1,1,Z), MEAN(Z)  
+    !END DO
+
+  END SUBROUTINE mv_mean_bscan
+
+END MODULE MD_MVMEAN
+
+
