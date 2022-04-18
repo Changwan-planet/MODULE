@@ -36,27 +36,20 @@ CONTAINS
   INTEGER, INTENT(IN) :: TRA
   INTEGER, INTENT(IN) :: DIS3
 
-  REAL*8, DIMENSION(DIS3,1,ROWS) :: stacked_signal
+  REAL*8, DIMENSION(:,:,:), ALLOCATABLE :: stacked_signal
+      
+  !DO X = 1, DIS3
+  !DO Z = 1, ROWS
   
-
-  !Start from the 1 index. 
-  !This is becasue I did not fix the number in the header.
+  DO X = 1,DIS3
+  !  PRINT *, "X=",X
   
-  !CALCULATE THE AVERGE OF EACH ROW.
-
-
-!  PRINT *, "DIS3=",DIS3, 'TRA=',TRA, 'ROWS=',ROWS
-  
-  DO X = 1, DIS3
-  DO Z = 1, ROWS
- 
-     stacked_signal(X,Y,Z) = SUM(mv_bgr_signal(X,:,Z)) / TRA
-  
+  DO Z = 1,ROWS
+  !   PRINT *, "Z=",Z 
+     stacked_signal(X,1,Z) = SUM(mv_bgr_signal(X,:,Z)) / TRA     
   END DO
   END DO 
 
   END SUBROUTINE lateral_stacking
 
 END MODULE MD_STACKING
-
-
