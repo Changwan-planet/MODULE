@@ -7,7 +7,7 @@ IMPLICIT NONE
 CONTAINS
 
 !  SUBROUTINE hilbert(xreal,S,a_signal)
-  SUBROUTINE fft_hilbert(xreal,S,a_ifft_real)
+  SUBROUTINE fft_hilbert(xreal,S,a_ifft_real,a_ifft_imag)
 
 
   USE MD_FFT_IFFT

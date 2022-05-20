@@ -35,7 +35,8 @@ CONTAINS
          !PRINT *, "MV_X=",MV_X
          MV_X = MV_X + 1
     END DO
-
+   
+   
 ! DEALLOCATE(MV_MEAN_BSCAN)
  
   END SUBROUTINE mv_mean

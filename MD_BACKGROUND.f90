@@ -25,12 +25,14 @@ bgr_sum = 0.0
   DO i = e_1,e_2,1
 
     bgr_sum = bgr_sum + signal(i)
-
+    !print *, signal(i)
   END DO
   
   t = e_2 - e_1 + 1
+!    print *, "t=",t
 
-bgr =  bgr_sum / t
+  bgr =  bgr_sum / t
+!    print *, "bgr=",bgr
 
     END SUBROUTINE background
 
