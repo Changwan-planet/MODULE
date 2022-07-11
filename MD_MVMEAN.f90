@@ -3,8 +3,7 @@ MODULE MD_MVMEAN
 IMPLICIT NONE
 
 CONTAINS
-
-  SUBROUTINE mv_mean(B_SCAN_IMAGE, MV, DIS, ROWS, MV_MEAN_BSCAN) 
+  SUBROUTINE mv_meanx(B_SCAN_IMAGE, MV, DIS, ROWS, MV_MEAN_BSCAN) 
   IMPLICIT NONE
 
   INTEGER :: Z !depth
@@ -39,9 +38,74 @@ CONTAINS
    
 ! DEALLOCATE(MV_MEAN_BSCAN)
  
-  END SUBROUTINE mv_mean
+  END SUBROUTINE mv_meanx
+
+
+  SUBROUTINE mv_meany(B_SCAN_IMAGE, MV_WIN, DIS, ROWS, ROWS2,MV_MEAN_BSCAN) 
+  IMPLICIT NONE
+
+  INTEGER :: Z !depth
+  INTEGER :: X, XX
+  INTEGER, INTENT(IN) :: MV_WIN
+
+  INTEGER, INTENT(IN) :: DIS
+  INTEGER, INTENT(IN) :: ROWS
+  INTEGER, INTENT(IN) :: ROWS2
+  
+  REAL*8, DIMENSION(DIS,1,ROWS), INTENT(IN) :: B_SCAN_IMAGE
+  REAL*8, DIMENSION(DIS,1,ROWS2) :: MV_MEAN_BSCAN
+  REAL*8, DIMENSION(1,1,ROWS) :: TEMP
+
+    DO X = 1, DIS  
+     
+       TEMP(1,1,:) = 0.0
+    
+    DO Z = 1, ROWS2
+        TEMP(1,1,Z) = SUM(B_SCAN_IMAGE(X,1,Z:Z+MV_WIN-1)) / REAL(MV_WIN)
+    END DO
+         MV_MEAN_BSCAN(X,1,:) = TEMP(1,1,:)
+    END DO
+   
+   END SUBROUTINE mv_meany
+
+  SUBROUTINE twmvmean(B_SCAN_IMAGE4, DIS, TRA, ROWS, W, B_SCAN_IMAGE5) 
+  IMPLICIT NONE
+
+  INTEGER :: X,Y,Z 
+  INTEGER, PARAMETER :: MV_DIS = (DIS - W) + 1
+  INTEGER, PARAMETER :: MV_TRA = (TRA - W) +1
+  INTEGER :: MV_X, MV_Y
+
+  INTEGER, INTENT(IN) :: DIS
+  INTEGER, INTENT(IN) :: TRA
+  INTEGER, INTENT(IN) :: ROWS
+  INTEGER, INTENT(IN) :: W !the number of values for moving average
+  
+  REAL*8, DIMENSION(DIS,TRA,ROWS), INTENT(IN) :: B_SCAN_IMAGE4
+  REAL*8, DIMENSION(:,:,:), ALLOCATABLE ::B_SCAN_IMAGE5
+  
+  REAL*8, DIMENSION(1,1,ROWS) :: TEMP
+  REAL*8 :: SUM_2DW_amp
+
+    DO Z = 1, ROWS
+       DO MV_X = 1, MV_DIS
+       DO MV_Y = 1, MV_TRA
+
+          SUM_2DW_amp = 0.0
+          DO X = MV_X, MV_X+W-1
+          DO Y = MV_Y, MV_Y+W-1
+
+             SUM_2DW_amp = SUM_2DW_amp + B_SCAN_IMAGE4(X,Y,Z)
+                                             
+          END DO
+          END DO
+
+          B_SCAN_IMAGE5(MV_X,MV_Y,Z) = ( SUM_2DW_amp ) / (W**2)
+
+       END DO
+       END DO
+    END DO 
+
+  END SUBROUTINE twmvmean
 
 END MODULE MD_MVMEAN
-
-
-
