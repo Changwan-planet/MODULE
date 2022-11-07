@@ -6,8 +6,9 @@ IMPLICIT NONE
 
 CONTAINS
 
-!  SUBROUTINE hilbert(xreal,S,a_signal)
-  SUBROUTINE dft_hilbert(xreal,S,a_idft_real,a_idft_imag)
+!  SUBROUTINE dft_hilbert(xreal,S,a_idft_real,a_idft_imag)
+  SUBROUTINE dft_hilbert(xreal,S,a_idft_real)
+
 
 
 !  USE MD_FFT_IFFT
@@ -16,7 +17,7 @@ CONTAINS
   IMPLICIT NONE
 
   INTEGER :: i
-  INTEGER, INTENT(IN) :: S                               !the number of sample point     
+  INTEGER, INTENT(IN) :: S                !the number of sample point     
   REAL*8, PARAMETER ::  pi = ACOS(-1.0)
 
 

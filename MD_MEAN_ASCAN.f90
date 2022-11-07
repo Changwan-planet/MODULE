@@ -24,7 +24,8 @@ CONTAINS
    
    !DO Z = 1, ROWS
    !   PRINT *, Z,  B_SCAN_IMAGE(1,1,Z), MEAN(Z)  
-   !END DO
+   !   PRINT *, Z,  MEAN(Z)  
+   ! END DO
 
   END SUBROUTINE mean_ascany
 
@@ -32,6 +33,7 @@ CONTAINS
   IMPLICIT NONE
 
   INTEGER :: Z !depth
+  INTEGER :: X
 
   INTEGER, INTENT(IN) :: DIS
   INTEGER, INTENT(IN) :: ROWS
@@ -39,17 +41,21 @@ CONTAINS
   
   REAL*8, DIMENSION(ROWS) :: MEAN
 
-   !DO Z = 1, ROWS
-   !   PRINT *, Z, B_SCAN_IMAGE(1,1,Z)
-   !END DO
+!   DO X = 1, DIS
+!      PRINT *, Z, B_SCAN_IMAGE(X,1,1)
+!   END DO
+   
+!   PRINT*, SUM(B_SCAN_IMAGE(:,1,1)),  REAL(SIZE(B_SCAN_IMAGE(:,1,1))) 
 
    DO Z = 1, ROWS
         MEAN(Z) = SUM(B_SCAN_IMAGE(:,1,Z)) / REAL(SIZE(B_SCAN_IMAGE(:,1,1))) 
+ !        MEAN(Z) = SUM(B_SCAN_IMAGE(:,1,Z))  
    END DO
    
-   !DO Z = 1, ROWS
-   !   PRINT *, Z,  B_SCAN_IMAGE(1,1,Z), MEAN(Z)  
-   !END DO
+!   DO Z = 1, ROWS
+!      PRINT *, Z,  B_SCAN_IMAGE(1,1,Z), MEAN(Z)  
+!      PRINT *, Z, MEAN(Z)  
+!   END DO
 
   END SUBROUTINE mean_ascanx
 

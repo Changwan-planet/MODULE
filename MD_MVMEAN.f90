@@ -72,21 +72,25 @@ CONTAINS
   IMPLICIT NONE
 
   INTEGER :: X,Y,Z 
-  INTEGER, PARAMETER :: MV_DIS = (DIS - W) + 1
-  INTEGER, PARAMETER :: MV_TRA = (TRA - W) +1
-  INTEGER :: MV_X, MV_Y
-
-  INTEGER, INTENT(IN) :: DIS
+  INTEGER, INTENT(IN) :: W !the number of values for moving average
+   INTEGER, INTENT(IN) :: DIS
   INTEGER, INTENT(IN) :: TRA
   INTEGER, INTENT(IN) :: ROWS
-  INTEGER, INTENT(IN) :: W !the number of values for moving average
   
+  INTEGER :: MV_DIS
+  INTEGER :: MV_TRA
+  INTEGER :: MV_X, MV_Y
+
+ 
   REAL*8, DIMENSION(DIS,TRA,ROWS), INTENT(IN) :: B_SCAN_IMAGE4
   REAL*8, DIMENSION(:,:,:), ALLOCATABLE ::B_SCAN_IMAGE5
   
   REAL*8, DIMENSION(1,1,ROWS) :: TEMP
   REAL*8 :: SUM_2DW_amp
 
+  MV_DIS = (DIS - W) + 1
+  MV_TRA = (TRA - W) +1
+ 
     DO Z = 1, ROWS
        DO MV_X = 1, MV_DIS
        DO MV_Y = 1, MV_TRA
