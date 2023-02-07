@@ -79,7 +79,78 @@ CONTAINS
 
   END SUBROUTINE 
 
+  SUBROUTINE background(signal,ROWS,e_1,e_2,bgr)
+  IMPLICIT NONE
+
+  INTEGER, INTENT(IN) :: ROWS
+
+  REAL*8, DIMENSION(1:ROWS), INTENT(IN) :: signal
+  !Start from the 1 index. 
+  !This is becasue I did not fix the number in the header.
+  INTEGER, INTENT(IN) :: e_1
+  INTEGER, INTENT(IN) :: e_2
+
+  REAL*8 :: bgr_sum
+  REAL*8 :: bgr
+
+  INTEGER :: i
+  INTEGER :: t
+
+  bgr_sum = 0.0
+
+  DO i = e_1,e_2,1
+
+    bgr_sum = bgr_sum + signal(i)
+    !print *, signal(i)
+  END DO
+
+  t = e_2 - e_1 + 1
+  !    print *, "t=",t
+
+  bgr =  bgr_sum / t
+  !    print *, "bgr=",bgr
+
+  END SUBROUTINE background
 
 
+SUBROUTINE zero_padding(signal,ROWS,ROWS2,signal_ZEROPAD2)
+  INTEGER, INTENT(IN) :: ROWS 
+  REAL*8, DIMENSION(ROWS), INTENT(IN) :: signal
+  REAL*8, DIMENSION(ROWS) :: singal_ZEROPAD
+  REAL*8, DIMENSION(ROWS2) :: singal_ZEROPAD2
+  REAL*8, DIMENSION(ROWS) :: ZERO_PAD
+  INTEGER :: Z, T, BAND, k, f_c 
+
+  !=====ZERO_PADDING=====
+  !ZERO_PAD = 1.0
+
+  !GAUSSIAN 
+  !BAND = 100
+  !T = 3
+  !DO Z = 1, ROWS
+  !   ZERO_PAD(Z) = EXP(- (((Z-1)-(BAND * T)) / 2.0 * T) **2)
+  !END DO 
+
+
+  !BUTTERWORTH
+  f_c = 450 
+  k = 50
+  DO Z = 1, ROWS
+     ZERO_PAD(Z)  = SQRT(1.0/ (1.0 + ( (REAL(Z)/REAL(f_c))**(2.0 * k) ) ) ) 
+  END DO 
+
+
+  !ZERO PADDING
+  DO Z = 1, ROWS
+     signal_ZEROPAD(Z) = signal(Z) * ZERO_PAD(Z)
+  END DO 
+
+
+  !THE FIRST DATA FROM AN A-SCOPE OF GPR HAS ZERO VALUE.
+  !SO THAT I WRITE THE DATA FROM 2 TO REMOVE IT.
+  DO Z = 2, ROWS2+1   
+     signal_ZEROPAD2(Z) = signal_ZEROPAD(Z)
+  END DO 
+END SUBROUTINE zero_padding
 
 END MODULE MD_BASIC
