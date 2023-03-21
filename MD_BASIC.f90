@@ -113,13 +113,11 @@ CONTAINS
   END SUBROUTINE background
 
 
-SUBROUTINE zero_padding(signal,ROWS,ROWS2,signal_ZEROPAD2)
+SUBROUTINE zero_padding(signal,ROWS,ROWS2,signal_ZEROPAD)
   INTEGER, INTENT(IN) :: ROWS 
   INTEGER, INTENT(IN) :: ROWS2
   REAL*8, DIMENSION(ROWS), INTENT(IN) :: signal
-
-  REAL*8, DIMENSION(ROWS) :: signal_ZEROPAD
-  REAL*8, DIMENSION(ROWS2) :: signal_ZEROPAD2
+  REAL*8, DIMENSION(ROWS2) :: signal_ZEROPAD
   REAL*8, DIMENSION(ROWS) :: ZERO_PAD
   INTEGER :: Z, T, BAND, k, f_c 
 
@@ -143,16 +141,50 @@ SUBROUTINE zero_padding(signal,ROWS,ROWS2,signal_ZEROPAD2)
 
 
   !ZERO PADDING
-  DO Z = 1, ROWS
+  DO Z = 1, ROWS2
      signal_ZEROPAD(Z) = signal(Z) * ZERO_PAD(Z)
   END DO 
 
-
-  !THE FIRST DATA FROM AN A-SCOPE OF GPR HAS ZERO VALUE.
-  !SO THAT I WRITE THE DATA FROM 2 TO REMOVE IT.
-  DO Z = 2, ROWS2+1   
-     signal_ZEROPAD2(Z) = signal_ZEROPAD(Z)
-  END DO 
 END SUBROUTINE zero_padding
+
+
+
+
+!reference Basic Earth Imaging writted by Jon Claerbout
+!subroutine: adjnull, matmul
+subroutine adjnull(adj, add, x, nx, y, ny)
+integer  ix, iy,    adj, add,    nx,    ny
+real                          x(nx), y(ny)
+if(add == 0 ) then
+       if(adj == 0) then
+              do iy = 1, ny
+                       y(iy) = 0
+              end do 
+       else 
+              do ix = 1, nx
+                       x(ix) =0 
+              end do 
+       end if 
+end if 
+!return; end 
+end subroutine adjnull
+
+!matrix multiply and its adjoint
+subroutine matmult( adj, add, bb,         x,nx, y, ny)
+integer ix, iy,     adj, add,               nx,    ny
+real                          bb(ny, nx), x(nx), y(ny)
+call adjnull(       adj, add,             x,nx,  y,ny)
+
+do ix= 1, nx 
+do iy= 1, ny
+        if(add == 0 ) then
+                       y(iy) = y(iy) + bb(iy, ix) * x(ix)
+                       x(ix) = x(ix) + bb(iy, ix) * y(iy)
+        end if 
+end do 
+end do
+
+!return; end
+end subroutine matmult
 
 END MODULE MD_BASIC

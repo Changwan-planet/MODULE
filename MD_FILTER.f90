@@ -1,9 +1,10 @@
+!PRINT DATE > Mon Mar 13 01:34:13 PM KST 2023
 MODULE MD_FILTER
 IMPLICIT NONE
 
 CONTAINS
 !BAND PASS FILTER
-SUBROUTINE bpf_butter(f_real, f_imag, ROWS, f_h, f_l, k, filter3, bpf_real, bpf_imag)
+SUBROUTINE bpf_butter(f_real, f_imag, ROWS, f_l, f_h, k, filter3, bpf_real, bpf_imag)
 IMPLICIT NONE
 REAL*8, DIMENSION(ROWS),INTENT(IN) :: f_real
 REAL*8, DIMENSION(ROWS),INTENT(IN) :: f_imag
@@ -27,10 +28,16 @@ REAL*8, DIMENSION(ROWS) :: bpf_imag     !f_imag after band-pass filter
 !PRINT *, k, f_c
 
 !==========BUTTERWORTH FILTER===========
+!DO  f = 1, ROWS
+!    filter(f) = SQRT(1.0 - (1.0/ (1.0 + ( (REAL(f)/REAL(f_h))**(2.0 * k) ) ))) &
+!     *SQRT(1.0-( ((REAL(f)/REAL(f_l))**(2.0*k))/(1+(REAL(f)/REAL(f_l))**(2.0*k))))
+!END DO
+
 DO  f = 1, ROWS
-    filter(f) = SQRT(1.0 - (1.0/ (1.0 + ( (REAL(f)/REAL(f_h))**(2.0 * k) ) ))) &
-     *SQRT(1.0-( ((REAL(f)/REAL(f_l))**(2.0*k))/(1+(REAL(f)/REAL(f_l))**(2.0*k))))
+    filter(f) = SQRT(1.0/ (1.0 + ( (REAL(f)/REAL(f_h))**(2.0 * k) ) )) &
+     *SQRT( ((REAL(f)/REAL(f_l))**(2.0*k))/(1+(REAL(f)/REAL(f_l))**(2.0*k)))
 END DO
+
 
 !FLIP THE FILTER
 DO f = 1, ROWS
@@ -41,11 +48,14 @@ DO f = 1, ROWS
    filter3(f) = filter(f) + filter2(f) 
 END DO  
 !=====================================
-
+ 
 
 DO f = 1, ROWS
+   !PRINT*, filter(f) 
    bpf_real(f) =  filter3(f) * f_real(f)
    bpf_imag(f) =  filter3(f) * f_imag(f)
+   !PRINT*, bpf_real(f), bpf_imag(f) 
+ 
 END DO 
 
 END SUBROUTINE

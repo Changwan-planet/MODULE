@@ -11,16 +11,16 @@ CONTAINS
 
   INTEGER, INTENT(IN) :: S
 
-  REAL*8, DIMENSION(0:S-1), INTENT(IN) :: h
-  REAL*8, DIMENSION(0:S-1), INTENT(IN) :: x 
+  REAL*8, DIMENSION(S), INTENT(IN) :: h
+  REAL*8, DIMENSION(S), INTENT(IN) :: x 
 
-  REAL*8, DIMENSION(-S:2*S-1) :: h_dis
-  REAL*8, DIMENSION(-S:2*S-1) :: h_dis2
+  REAL*8, DIMENSION(3*S) :: h_dis
+  REAL*8, DIMENSION(3*S) :: h_dis2
 
 
-  REAL*8, DIMENSION(-S:2*S-1) :: x_dis
+  REAL*8, DIMENSION(3*S) :: x_dis
 
-  REAL*8, DIMENSION(-S:2*S-1) :: multi
+  REAL*8, DIMENSION(3*S) :: multi
   REAL*8, DIMENSION(0:2*S) :: crrl
  
   INTEGER :: i,j,k
@@ -34,13 +34,13 @@ crrl = 0.0
 !   PRINT *, i,  h(i), x(i)
 !END DO 
 
-DO i=0, S-1
+DO i=1, S
    x_dis(i) = x(i)
 END DO
 
 
-DO i=0,S-1
-   h_dis(-S+i)=h(i)
+DO i=S+1,2*S
+   h_dis(i)=h(-S+i)
 END DO
 
 
