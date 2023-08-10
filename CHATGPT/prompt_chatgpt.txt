@@ -1,0 +1,13 @@
+First, check wheather GPT know the concept or not. 
+Also LOOK INTO the codes that GPT share.
+
+Second, make a graph, do not use aspect. 
+Just in case, you can use that if you are not strict to data.
+
+
+Do not use aspect when you make a graph.
+Make names of functions and variables short.
+
+
+Integrate the codes to use outside of this environment.
+

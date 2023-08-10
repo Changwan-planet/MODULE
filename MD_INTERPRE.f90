@@ -23,5 +23,48 @@ CONTAINS
   END DO 
   
   END SUBROUTINE horizon_pick
+
+  SUBROUTINE power_pick(B_SCAN_IMAGE, DIS, TRA, ROWS, H_X, H_Z, i_h) 
+  IMPLICIT NONE
+
+  INTEGER, INTENT(IN) :: DIS
+  INTEGER, INTENT(IN) :: TRA
+  INTEGER, INTENT(IN) :: ROWS
+
+
+  REAL*8, DIMENSION(DIS,1,ROWS), INTENT(IN) :: B_SCAN_IMAGE
+   
+  INTEGER, DIMENSION(:), ALLOCATABLE :: H_X
+  INTEGER, DIMENSION(:), ALLOCATABLE :: H_Z
+   
+  INTEGER :: X, Y, Z
+  INTEGER :: XX, ZZ
+  INTEGER :: i_h 
+
+  !ALLOCATE(H_X(ROWS*DIS))
+  !ALLOCATE(H_Z(ROWS*DIS))
+
+
+  i_h = 0
+
+  DO X= 1, DIS  
+  DO Z = 2, ROWS-1
+
+     IF (  B_SCAN_IMAGE(X, 1, Z-1) < B_SCAN_IMAGE(X, 1, Z) .AND. &
+         & B_SCAN_IMAGE(X, 1, Z+1) > B_SCAN_IMAGE(X, 1, Z)  ) THEN
+  
+        !PRINT *, X,Z
+        H_X(X) = X 
+        H_Z(Z) = Z
+
+     END IF
+
+     i_h = i_h +1
+  
+  END DO 
+  END DO 
+   
+  END SUBROUTINE power_pick
+
 END MODULE MD_INTERPRE
 

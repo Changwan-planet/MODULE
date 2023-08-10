@@ -1,0 +1,13 @@
+https://medium.com/intuition/singular-value-decomposition-svd-working-example-c2b6135673b5
+
+
+https://blog.naver.com/combioai/220861349129
+
+https://twlab.tistory.com/17
+
+https://twlab.tistory.com/entry/Linear-Algebra-Lecture-5-2-%EB%B2%A1%ED%84%B0-%EA%B3%B5%EA%B0%84Vector-Spaces-%EB%B6%80%EB%B6%84-%EA%B3%B5%EA%B0%84Sub-Spaces
+
+https://ratsgo.github.io/from frequency to semantics/2017/04/06/pcasvdlsa/
+
+
+https://ratsgo.github.io/machine%20learning/2017/04/24/PCA/
