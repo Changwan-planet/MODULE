@@ -70,6 +70,38 @@ CONTAINS
   
   END SUBROUTINE mv_meanz
 
+
+
+
+  SUBROUTINE meany(B_SCAN_IMAGE, DIS, ROWS, A, B, C, TEMP2) 
+  IMPLICIT NONE
+  
+  INTEGER :: Z !depth
+  INTEGER :: X, Y 
+  
+  INTEGER, INTENT(IN) :: DIS
+  INTEGER, INTENT(IN) :: ROWS
+  INTEGER, INTENT(IN) :: A, B, C
+ 
+
+  REAL*8, DIMENSION(DIS,C,ROWS), INTENT(IN) :: B_SCAN_IMAGE
+  REAL*8, DIMENSION(DIS,1,ROWS) :: TEMP, TEMP2
+  
+
+    TEMP(:,1,:) = 0.0
+    
+    DO Y = A, B
+         TEMP(:,1,:) = TEMP(:,1,:) + B_SCAN_IMAGE(:,Y,:)
+    END DO
+         
+    TEMP2(:,1,:) = TEMP(:,1,:) / (B-A+1)
+
+ 
+  END SUBROUTINE meany
+
+
+
+
   SUBROUTINE twmvmean(B_SCAN_IMAGE4, DIS, TRA, ROWS, W, B_SCAN_IMAGE5) 
   IMPLICIT NONE
   
